@@ -29,6 +29,10 @@ Minimal, lofi esintili ve hafif bir Pomodoro masaüstü uygulaması. Tauri (Rust
 - Focus modu: tek tuşla tam ekran; özel frameless title bar ile temiz görünüm
 - Lofi arka plan: grain, blob ve dalga efektleriyle düşük dikkat dağıtımı
 
+## Ekran Görüntüsü
+
+<img width="2559" height="1439" alt="image" src="https://github.com/user-attachments/assets/83341ec0-9f55-4af5-a953-4e2f6d64f392" />
+
 ## Kurulum
 
 Önkoşullar:
