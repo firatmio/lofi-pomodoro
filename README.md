@@ -1,6 +1,27 @@
-# Tauri + React + Typescript
+# Lofi Pomodoro (Tauri + React)
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Basit, kalıcı ayarlar ve istatistiklerle lofi temalı Pomodoro uygulaması.
+
+Özellikler:
+
+- Pomodoro akışı: Odak, Kısa Mola, Uzun Mola
+- Ayarlar: süreler, uzun mola aralığı, otomatik başlat, sesli uyarı
+- Kalıcılık: Tauri Store ile `settings.json` dosyasında saklanır
+- Bildirim: Seans bitiminde sistem bildirimi
+- Lofi arka plan ve minimal UI
+
+Geliştirme:
+
+```bash
+npm install
+npm run tauri dev
+```
+
+Build:
+
+```bash
+npm run tauri build
+```
 
 ## Recommended IDE Setup
 
