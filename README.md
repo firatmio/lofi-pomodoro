@@ -1,14 +1,14 @@
 <div align="center">
-	<img alt="app screenshot" width="840" src="https://svg-banners.vercel.app/api?type=glitch&text1=Lofi%20Pomodoro&width=840&height=200" />
-	<br />
-	<sub>Temsili banner – uygulama içinde minimal sayaç ve lofi arka plan bulunur.</sub>
+    <img alt="app screenshot" width="840" src="https://svg-banners.vercel.app/api?type=glitch&text1=Lofi%20Pomodoro&width=840&height=200" />
+    <br />
+    <sub>Representative banner – the app includes a minimal timer and a lofi background.</sub>
 </div>
 
 <div align="center">
 
 #
 
-Minimal, lofi esintili ve hafif bir Pomodoro masaüstü uygulaması. Tauri (Rust) + React ile hızlı, düşük bellek tüketimli ve platformlar arası.
+A minimal, lofi-inspired, lightweight Pomodoro desktop app. Built with Tauri (Rust) + React for fast, low-memory, cross-platform performance.
 
 <!-- Badges -->
 
@@ -16,89 +16,89 @@ Minimal, lofi esintili ve hafif bir Pomodoro masaüstü uygulaması. Tauri (Rust
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=0b1e2b)](https://react.dev)
 [![Rust](https://img.shields.io/badge/Rust-1.75+-000?logo=rust&logoColor=white)](https://www.rust-lang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license)
-[![Platform](https://img.shields.io/badge/Platforms-Windows%20%7C%20macOS%20%7C%20Linux-444)](#kurulum)
+[![Platform](https://img.shields.io/badge/Platforms-Windows%20%7C%20macOS%20%7C%20Linux-444)](#installation)
 
 </div>
 
-## Özellikler
+## Features
 
-- Pomodoro akışı: Odak, Kısa Mola, Uzun Mola; otomatik sıradaki moda geçiş seçeneği
-- Ayarlar: süreler, uzun mola aralığı, otomatik başlat, sesli uyarı (ayarlar kalıcıdır)
-- İstatistikler: tamamlanan odak, toplam süre, günlük seri takibi
-- Bildirim: seans bitiminde sistem bildirimi
-- Focus modu: tek tuşla tam ekran; özel frameless title bar ile temiz görünüm
-- Lofi arka plan: grain, blob ve dalga efektleriyle düşük dikkat dağıtımı
+- Pomodoro flow: Focus, Short Break, Long Break; optional auto-switch to the next mode
+- Settings: durations, long break interval, auto start, sound alert (settings persist)
+- Stats: completed focus sessions, total time, daily streak tracking
+- Notification: system notification at session end
+- Focus mode: one-key fullscreen; custom frameless title bar for a clean look
+- Lofi background: grain, blob, and wave effects with low distraction
 
-## Kurulum
+## Installation
 
-Önkoşullar:
+Prerequisites:
 
-- Node.js 18+ ve npm
-- Rust toolchain (cargo) ve Tauri bağımlılıkları (platforma göre ek kütüphaneler gerekebilir)
+- Node.js 18+ and npm
+- Rust toolchain (cargo) and Tauri dependencies (additional platform-specific libraries may be required)
 
-Depoyu kopyalayın ve bağımlılıkları kurun:
+Clone the repository and install dependencies:
 
 ```bash
 npm install
 ```
 
-Geliştirme modunda çalıştırın:
+Run in development mode:
 
 ```bash
 npm run tauri dev
 ```
 
-Prod derleme alın:
+Create a production build:
 
 ```bash
 npm run tauri build
 ```
 
-## Kullanım
+## Usage
 
-- Başlat/Duraklat: orta alttaki kontrol butonları
-- Sonraki moda atla: ileri butonu
-- Focus modu: sağ üstteki simge, klavyeden F11 veya F
-- Ayarlar: sol alttaki dişli ikon
+- Start/Pause: controls at the bottom center
+- Skip to next mode: forward button
+- Focus mode: icon at the top right, F11 or F on the keyboard
+- Settings: gear icon at the bottom left
 
-## Mimari Kısa Özet
+## Architecture Overview
 
-- Arayüz: React + Vite
-- Masaüstü katmanı: Tauri v2
-- Kalıcılık: tauri-plugin-store (ayarlar ve istatistikler)
-- Bildirim: tauri-plugin-notification
-- Özel başlık çubuğu: frameless pencere + Tauri window API izinleri
+- UI: React + Vite
+- Desktop layer: Tauri v2
+- Persistence: tauri-plugin-store (settings and stats)
+- Notification: tauri-plugin-notification
+- Custom title bar: frameless window + Tauri window API permissions
 
-Kaynak dosyalar:
+Key files:
 
-- `src/App.tsx` – uygulama kabuğu, fokus modu kontrolü
-- `src/components/TimerDisplay.tsx` – sayaç UI’si
-- `src/components/SettingsModal.tsx` – ayarlar penceresi
-- `src/components/AlarmOverlay.tsx` – seans sonu animasyon/uyarı
-- `src/components/TitleBar.tsx` – özel title bar ve pencere kontrolleri
-- `src-tauri/tauri.conf.json` – Tauri ayarları (frameless vb.)
-- `src-tauri/capabilities/default.json` – izinler (fullscreen, minimize, maximize, close, drag)
+- `src/App.tsx` – app shell, focus mode control
+- `src/components/TimerDisplay.tsx` – timer UI
+- `src/components/SettingsModal.tsx` – settings dialog
+- `src/components/AlarmOverlay.tsx` – session-end animation/alert
+- `src/components/TitleBar.tsx` – custom title bar and window controls
+- `src-tauri/tauri.conf.json` – Tauri config (frameless, etc.)
+- `src-tauri/capabilities/default.json` – permissions (fullscreen, minimize, maximize, close, drag)
 
-## Kısayollar
+## Shortcuts
 
-- F veya F11: focus (fullscreen) modunu aç/kapat
-- ESC: fullscreen’den çık
+- F or F11: toggle focus (fullscreen) mode
+- ESC: exit fullscreen
 
-## Sorun Giderme
+## Troubleshooting
 
-- Windows’ta dev oturumunu kapatırken Chromium sınıfı unregister logları görebilirsiniz; zararsızdır.
-- Fullscreen geçişlerinde sorun yaşarsanız, pencereyi restore edip tekrar deneyin.
+- On Windows, you may see Chromium class unregister logs when closing the dev session; they are harmless.
+- If you experience issues toggling fullscreen, restore the window and try again.
 
-## Yol Haritası
+## Roadmap
 
-- Gelişmiş istatistik paneli ve grafikler
-- Kısayol özelleştirme
-- Tema varyasyonları (daha açık/daha koyu lofi tonları)
+- Advanced stats panel and charts
+- Shortcut customization
+- Theme variations (lighter/darker lofi tones)
 
-## Katkı
+## Contributing
 
-PR’ler memnuniyetle karşılanır. Büyük değişiklikler için önce tartışma açmanız önerilir.
+PRs are welcome. For major changes, please open a discussion first.
 
-## Lisans
+## License
 
-Bu proje MIT lisansı ile lisanslanmıştır. Ayrıntılar için [LICENSE](./LICENSE) dosyasına bakın.
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
