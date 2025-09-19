@@ -29,15 +29,7 @@ A minimal, lofi-inspired, lightweight Pomodoro desktop app. Built with Tauri (Ru
 - Focus mode: one-key fullscreen; custom frameless title bar for a clean look
 - Lofi background: grain, blob, and wave effects with low distraction
 
-<<<<<<< HEAD
 ## Installation
-=======
-## Ekran Görüntüsü
-
-<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/197bc6ac-407c-41a6-bead-b440d7f736b4" />
-
-## Kurulum
->>>>>>> 03f24eee4aa992be0f681ae6569eeb6c3f6b0eb8
 
 Prerequisites:
 
