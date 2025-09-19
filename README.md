@@ -31,7 +31,7 @@ Minimal, lofi esintili ve hafif bir Pomodoro masaüstü uygulaması. Tauri (Rust
 
 ## Ekran Görüntüsü
 
-<img width="2559" height="1439" alt="image" src="https://github.com/user-attachments/assets/83341ec0-9f55-4af5-a953-4e2f6d64f392" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/197bc6ac-407c-41a6-bead-b440d7f736b4" />
 
 ## Kurulum
 
