@@ -1,0 +1,19 @@
+.titlebar{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 8px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  -webkit-app-region: drag;
+  z-index: 50;
+}
+.titlebar-left{display:flex; align-items:center; gap:8px;}
+.titlebar-title{ margin-left:6px; font-size:12px; color: var(--muted); letter-spacing:0.5px;}
+.titlebar-actions{ display:flex; gap:4px; -webkit-app-region: no-drag;}
+.tb-btn{ width:28px; height:24px; display:grid; place-items:center; border:none; border-radius:6px; background:transparent; color:var(--text); cursor:pointer;}
+.tb-btn:hover{ background: rgba(255,255,255,0.06);}
+.tb-btn.close:hover{ background: rgba(244,63,94,0.28);}
+
+.container.focus-on ~ .titlebar, .focus-on .titlebar{ display: none; }

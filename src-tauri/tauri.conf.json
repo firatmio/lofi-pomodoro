@@ -12,9 +12,13 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "lofi-pomodoro",
+        "decorations": false,
         "width": 800,
-        "height": 600
+        "height": 500,
+        "minHeight": 500,
+        "minWidth": 800
       }
     ],
     "security": {

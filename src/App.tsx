@@ -5,6 +5,7 @@ import "./App.css";
 import { AlarmOverlay } from "./components/AlarmOverlay";
 import { SettingsModal } from "./components/SettingsModal";
 import { TimerDisplay } from "./components/TimerDisplay";
+import { TitleBar } from "./components/TitleBar";
 import { notify } from "./lib/notify";
 import { read, write } from "./lib/store";
 import { DEFAULT_SETTINGS, isToday, labelFor, nextMode, secondsFor, ZERO_STATS, type Mode, type Settings, type Stats } from "./lib/types";
@@ -15,7 +16,7 @@ function App() {
   const [mode, setMode] = useState<Mode>("work");
   const [secondsLeft, setSecondsLeft] = useState<number>(secondsFor("work", DEFAULT_SETTINGS));
   const [running, setRunning] = useState(false);
-  const [cycleCount, setCycleCount] = useState(0); // tamamlanan odak sayacı
+  const [cycleCount, setCycleCount] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const [alarming, setAlarming] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
@@ -23,8 +24,8 @@ function App() {
   const [grid, setGrid] = useState<{ cols: number; rows: number }>({ cols: 0, rows: 0 });
   const tickRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const wasMaximizedRef = useRef<boolean>(false);
 
-  // load settings + stats
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -44,7 +45,6 @@ function App() {
     };
   }, []);
 
-  // persist settings and stats on change
   useEffect(() => {
     write("settings", settings);
   }, [settings]);
@@ -53,7 +53,6 @@ function App() {
     write("stats", stats);
   }, [stats]);
 
-  // timer loop
   useEffect(() => {
     if (!running) {
       if (tickRef.current) {
@@ -77,25 +76,20 @@ function App() {
     };
   }, [running]);
 
-  // on complete
   useEffect(() => {
     if (secondsLeft !== 0) return;
-    // alarm state
     setAlarming(true);
     if (settings.soundOn) {
       audioRef.current?.play().catch(() => {});
     }
-    // auto silence after 5s
     if (alarmTimeoutRef.current) clearTimeout(alarmTimeoutRef.current);
     alarmTimeoutRef.current = window.setTimeout(() => {
       silenceAlarm();
     }, 5000);
-    // bildirim
     const nextLabel = nextMode(mode, cycleCount, settings) === "work" ? "Odak" : "Mola";
     notify("Zaman doldu", `${labelFor(mode)} tamamlandı. Sırada ${nextLabel}!`);
 
     if (mode === "work") {
-      // istatistik güncelle
       setStats((st) => ({
         completedFocus: st.completedFocus + 1,
         totalSeconds: st.totalSeconds + secondsFor("work", settings),
@@ -111,7 +105,6 @@ function App() {
     setRunning(settings.autoStartNext);
   }, [secondsLeft]);
 
-  // alarming başlarken grid boyutunu hesapla ve resize’da güncelle
   useEffect(() => {
     if (!alarming) return;
     const compute = () => {
@@ -135,10 +128,6 @@ function App() {
     if (audioRef.current) audioRef.current.currentTime = 0;
   }
 
-  // nextMode & labelFor lib/types üzerinden geliyor
-
-  // eski sekmeli yapıdan kalan resetTo kaldırıldı
-
   function handleStartPause() {
     setRunning((r) => !r);
   }
@@ -155,12 +144,20 @@ function App() {
 
   async function toggleFocusMode() {
     try {
-      const win = getCurrentWindow();
+      const win = await getCurrentWindow();
       if (!focusMode) {
-        await (await win).setFullscreen(true);
+        wasMaximizedRef.current = await win.isMaximized();
+        if (wasMaximizedRef.current) {
+          try { await win.unmaximize(); } catch {}
+        }
+        await win.setFullscreen(true);
         setFocusMode(true);
       } else {
-        await (await win).setFullscreen(false);
+        await win.setFullscreen(false);
+        if (wasMaximizedRef.current) {
+          try { await win.maximize(); } catch {}
+        }
+        wasMaximizedRef.current = false;
         setFocusMode(false);
       }
     } catch (e) {
@@ -169,11 +166,13 @@ function App() {
     }
   }
 
-  // Klavye kısayolları: F ile toggla, Escape ile çık
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       if (key === 'f') {
+        e.preventDefault();
+        toggleFocusMode();
+      } else if (key === 'f11') {
         e.preventDefault();
         toggleFocusMode();
       } else if (key === 'escape' && focusMode) {
@@ -187,30 +186,33 @@ function App() {
 
   return (
     <main className={`container ${focusMode ? "focus-on" : ""}`}>
-      {/* Alarm ses kaynağı */}
+      <TitleBar />
       <audio ref={audioRef} src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto" />
 
-      {/* Minimal merkez */}
       <div className={`center ${alarming ? "alarming" : ""}`}>
         <TimerDisplay secondsLeft={secondsLeft} running={running} onToggle={handleStartPause} onNext={handleSkip} />
       </div>
 
-      {/* Sol alt ayarlar butonu */}
-      <button className="settings-fab" onClick={() => setShowSettings(true)} aria-label="Ayarlar">
+      <button className="settings-fab" title="settings" onClick={() => setShowSettings(true)} aria-label="Settings">
         <FiSettings size={18} />
       </button>
 
-      {/* Sağ üst Focus (fullscreen) butonu */}
-      <button className="focus-fab" onClick={toggleFocusMode} aria-label="Odak (Tam ekran)">
-        {focusMode ? <FiMinimize2 size={16} /> : <FiMaximize2 size={16} />}
+      <button className="focus-fab" title="F11/F - ESC" onClick={toggleFocusMode} aria-label="focus (Fullscreen)">
+        {focusMode ? (
+          <>
+            <FiMinimize2 size={16} />
+          </>
+        ) : (
+            <>
+              <FiMaximize2 size={16} />
+            </>
+        )}
       </button>
 
-      {/* Alarm overlay damla efekti ve sustur */}
       {alarming && (
         <AlarmOverlay rows={grid.rows} cols={grid.cols} onMute={silenceAlarm} />
       )}
 
-      {/* Ayarlar Modal */}
       {showSettings && (
         <SettingsModal
           settings={settings}
@@ -219,10 +221,8 @@ function App() {
         />
       )}
 
-      {/* Arkaplan görseli (ses yok) */}
       <div className="lofi-bg"><div className="grain" /></div>
 
-      {/* Ek blop katmanı (sadece focus modunda görünür) */}
       <div className="blobs">
         <div className="blob b1" />
         <div className="blob b2" />
@@ -232,7 +232,5 @@ function App() {
     </main>
   );
 }
-
-// yardımcılar ve bileşenler ilgili dosyalara taşındı
 
 export default App;
